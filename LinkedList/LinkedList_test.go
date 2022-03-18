@@ -5,52 +5,70 @@ import (
 	"testing"
 )
 
+func CreateLinkedList(length int) *LinkedList[int] {
+	ll := New[int]()
+	for i := 0; i < length; i++ {
+		ll.Append(i)
+	}
+	return ll
+}
+
 func TestLinkedList_Append(t *testing.T) {
-	type fields struct {
-		head *node[int]
-	}
-	type args struct {
-		data int
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			l := &LinkedList[int]{
-				head: tt.fields.head,
-			}
-			l.Append(tt.args.data)
-		})
-	}
+	t.Run("should increase size by one", func(t *testing.T) {
+		ll := New[int]()
+		ll.Append(1)
+		if ll.Size() != 1 {
+			t.Errorf("expected size to be 1, got %d", ll.Size())
+		}
+		ll.Append(2)
+		if ll.Size() != 2 {
+			t.Errorf("expected size to be 2, got %d", ll.Size())
+		}
+	})
+
+	t.Run("should populate the head if not already defined", func(t *testing.T) {
+		ll := New[int]()
+		ll.Append(1)
+		if ll.Size() != 1 {
+			t.Errorf("expected size to be 1, got %d", ll.Size())
+		}
+		if ll.head.data != 1 {
+			t.Errorf("expected head to be 1, got %d", ll.head.data)
+		}
+	})
 }
 
 func TestLinkedList_Contains(t *testing.T) {
-	type fields struct {
-		head *node[int]
-	}
 	type args struct {
 		data int
 	}
 	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   bool
+		name       string
+		linkedList *LinkedList[int]
+		args       args
+		want       bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:       "should return true if the linked list contains the data",
+			linkedList: CreateLinkedList(2),
+			args: args{
+				data: 1,
+			},
+			want: true,
+		},
+		{
+			name:       "should return false if the linked list does not contain the data",
+			linkedList: CreateLinkedList(2),
+			args: args{
+				data: 3,
+			},
+			want: false,
+		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			l := &LinkedList[int]{
-				head: tt.fields.head,
-			}
-			if got := l.Contains(tt.args.data); got != tt.want {
-				t.Errorf("Contains() = %v, want %v", got, tt.want)
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			if got := testCase.linkedList.Contains(testCase.args.data); got != testCase.want {
+				t.Errorf("Contains() = %v, want %v", got, testCase.want)
 			}
 		})
 	}
@@ -312,7 +330,7 @@ func TestNew(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := New(); !reflect.DeepEqual(got, tt.want) {
+			if got := New[int](); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("New() = %v, want %v", got, tt.want)
 			}
 		})

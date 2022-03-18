@@ -3,6 +3,7 @@ package LinkedList
 import "fmt"
 
 type nodeValue interface {
+	// Just using these because they feel sensible
 	int | string | float64
 }
 
@@ -158,14 +159,14 @@ func (l *LinkedList[T]) Print() {
 
 func (l *LinkedList[T]) PeekFirst() T {
 	if l.head == nil {
-		return nil
+		return *new(T)
 	}
 	return l.head.data
 }
 
 func (l *LinkedList[T]) PeekLast() T {
 	if l.head == nil {
-		return nil
+		return *new(T)
 	}
 	cur := l.head
 	for cur.next != nil {
