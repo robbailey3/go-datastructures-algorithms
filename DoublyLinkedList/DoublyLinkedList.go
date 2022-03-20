@@ -16,7 +16,7 @@ type DoublyLinkedList[T nodeValue] struct {
 	tail *node[T]
 }
 
-func New[T nodeValue](value T) *DoublyLinkedList[T] {
+func New[T nodeValue]() *DoublyLinkedList[T] {
 	return &DoublyLinkedList[T]{
 		head: nil,
 		tail: nil,
@@ -94,4 +94,36 @@ func (d *DoublyLinkedList[T]) Size() int {
 		cur = cur.next
 	}
 	return size
+}
+
+func (d *DoublyLinkedList[T]) IsEmpty() bool {
+	return d.head == nil
+}
+
+func (d *DoublyLinkedList[T]) Contains(node *node[T]) bool {
+	if d.head == nil {
+		return false
+	}
+	cur := d.head
+	for cur != nil {
+		if cur == node {
+			return true
+		}
+		cur = cur.next
+	}
+	return false
+}
+
+func (d *DoublyLinkedList[T]) ElementAt(index int) *node[T] {
+	if d.head == nil {
+		return nil
+	}
+	cur := d.head
+	for i := 0; i < index; i++ {
+		if cur.next == nil {
+			return nil
+		}
+		cur = cur.next
+	}
+	return cur
 }
